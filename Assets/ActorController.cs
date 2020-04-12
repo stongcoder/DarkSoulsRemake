@@ -65,7 +65,8 @@ public class ActorController : MonoBehaviour
         //rigid.position += movingVec * Time.fixedDeltaTime;
         if (isJagging)
         {
-            rigid.velocity = -jagSpeed;
+            Vector3 jagVelocity = new Vector3(0, jagSpeed.y, -jagSpeed.z * model.transform.position.z);
+            rigid.velocity = jagVelocity;
         }
         else
         {
