@@ -10,7 +10,11 @@ public class ActorController : MonoBehaviour
     public float runMultiPlayer=2;
     public bool isLockPlanar;
     public float jumpSpeed;
+    public Vector3 jagSpeed;
+    
     private Vector3 jumpVelocity;
+    public bool isJagging;
+   
 
     [SerializeField]
     private Animator anim;
@@ -39,6 +43,10 @@ public class ActorController : MonoBehaviour
             //Debug.Log("transform" + model.transform.forward + "d:" + playerInput.DVec);
 
         }
+        if (rigid.velocity.magnitude >0.1f )
+        {
+            anim.SetTrigger("roll");
+        }
         if (!isLockPlanar)
         {
             planarVec = model.transform.forward * playerInput.dMag * walkSpeed * (playerInput.run ? runMultiPlayer : 1);
@@ -47,15 +55,25 @@ public class ActorController : MonoBehaviour
         if (playerInput.jump)
         {
             anim.SetTrigger("jump");
-            Debug.Log("trigger");
+   
         }
+        
     }
     private void FixedUpdate()        
     {
         //注意使用rigid.position与rigid.velocity的区别
         //rigid.position += movingVec * Time.fixedDeltaTime;
-        rigid.velocity = new Vector3(planarVec.x, rigid.velocity.y, planarVec.z) + jumpVelocity;
+        if (isJagging)
+        {
+            rigid.velocity = -jagSpeed;
+        }
+        else
+        {
+            rigid.velocity = new Vector3(planarVec.x, rigid.velocity.y, planarVec.z) + jumpVelocity ;
+        }       
+       
         jumpVelocity = Vector3.zero;
+        
     }
 
 
@@ -75,17 +93,33 @@ public class ActorController : MonoBehaviour
     }
     private void IsGround()
     {
-        playerInput.inputEnabled = true;
-        isLockPlanar = false;
+       
+       
         anim.SetBool("isGround", true);
     }
     private void IsNotGround()
     {
         anim.SetBool("isGround", false);
     }
+    private void OnGroundEnter()
+    {
+        playerInput.inputEnabled = true;
+        isLockPlanar = false;
+        isJagging = false;
+    }
+  
     private void OnFallEnter()
     {
         playerInput.inputEnabled = false;
-        isLockPlanar = true;
+        isLockPlanar = true;       
+        
     }
+    private void OnJagEnter()
+    {
+        Debug.Log("jag");
+        playerInput.inputEnabled = false;
+        isLockPlanar = true;
+        isJagging = true;
+    }
+
 }
