@@ -10,12 +10,10 @@ public class ActorController : MonoBehaviour
     public float runMultiPlayer=2;
     public bool isLockPlanar;
     public float jumpSpeed;
-    public Vector3 jagSpeed;
+    public float jabMultiplier=1;
+    public Vector3 thrustVelocity;
     
-    private Vector3 jumpVelocity;
-    public bool isJagging;
-   
-
+    private Vector3 jumpVelocity;  
     [SerializeField]
     private Animator anim;
     private Rigidbody rigid;
@@ -40,7 +38,7 @@ public class ActorController : MonoBehaviour
             //为旋转添加球形缓动效果
             Vector3 temp = Vector3.Slerp(model.transform.forward, playerInput.dVec, 0.2f);
             model.transform.forward = temp;
-            //Debug.Log("transform" + model.transform.forward + "d:" + playerInput.DVec);
+            
 
         }
         if (rigid.velocity.magnitude >0.1f )
@@ -57,24 +55,22 @@ public class ActorController : MonoBehaviour
             anim.SetTrigger("jump");
    
         }
+        if (playerInput.attack)
+        {
+            anim.SetTrigger("attack");
+        }
         
     }
     private void FixedUpdate()        
     {
         //注意使用rigid.position与rigid.velocity的区别
         //rigid.position += movingVec * Time.fixedDeltaTime;
-        if (isJagging)
-        {
-            Vector3 jagVelocity = new Vector3(0, jagSpeed.y, -jagSpeed.z * model.transform.position.z);
-            rigid.velocity = jagVelocity;
-        }
-        else
-        {
-            rigid.velocity = new Vector3(planarVec.x, rigid.velocity.y, planarVec.z) + jumpVelocity ;
-        }       
-       
+        rigid.velocity = new Vector3(planarVec.x, rigid.velocity.y, planarVec.z) + jumpVelocity+thrustVelocity;
+
         jumpVelocity = Vector3.zero;
-        
+        thrustVelocity = Vector3.zero;
+
+
     }
 
 
@@ -82,14 +78,14 @@ public class ActorController : MonoBehaviour
     private void OnJumpEnter()
     {
         playerInput.inputEnabled = false;
-        //Debug.Log("jump enter");
+       
         jumpVelocity = new Vector3(0, jumpSpeed, 0);
         isLockPlanar = true;
     }
     private void OnJumpExit()
     {
         
-        //Debug.Log("jump exit");
+       
         
     }
     private void IsGround()
@@ -105,8 +101,7 @@ public class ActorController : MonoBehaviour
     private void OnGroundEnter()
     {
         playerInput.inputEnabled = true;
-        isLockPlanar = false;
-        isJagging = false;
+        isLockPlanar = false;        
     }
   
     private void OnFallEnter()
@@ -115,12 +110,22 @@ public class ActorController : MonoBehaviour
         isLockPlanar = true;       
         
     }
-    private void OnJagEnter()
-    {
-        Debug.Log("jag");
+    private void OnJabEnter()
+    {     
         playerInput.inputEnabled = false;
-        isLockPlanar = true;
-        isJagging = true;
+        isLockPlanar = true; 
+        
     }
-
+    private void OnJabUpdate()
+    {       
+        thrustVelocity= anim.GetFloat("jabVelocity") * -model.transform.forward*jabMultiplier;
+    }
+    void testAttack()
+    {
+        //Debug.Break();
+    }
+    void testExit()
+    {
+        Debug.Break();
+    }
 }

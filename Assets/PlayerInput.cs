@@ -12,17 +12,26 @@ public class PlayerInput : MonoBehaviour
 
     public string keyA="left shift";
     public string keyB="space";
-    public string keyC;
+    public string keyC="j";
     public string keyD;
+
+    public string ArrowUp = "up";
+    public string ArrowDown = "down";
+    public string ArrowLeft = "left";
+    public string ArrowRight = "right";
+
 
     [Header("=====Output Signals")]
     public float dUp;
     public float dRight;
+    public float cRight;
+    public float cUp;
     public float dMag;
     public Vector3 dVec;
     //1.pressing signal
     public bool run;
     //2.trigger once signal
+    public bool attack;
     public bool jump;
     //3.double trigger
 
@@ -33,6 +42,8 @@ public class PlayerInput : MonoBehaviour
     public bool inputEnabled = true;
     private void Update()
     {
+        cUp = (Input.GetKey(ArrowUp) ? 1 : 0 + (Input.GetKey(ArrowDown) ? -1 : 0));
+        cRight = (Input.GetKey(ArrowRight) ? 1:0 + (Input.GetKey(ArrowLeft) ? -1 : 0));
         targetUp = (Input.GetKey(keyUP) ? 1 : 0) + (Input.GetKey(keyDown) ? -1 : 0);
         targetRight = (Input.GetKey(keyLeft) ? -1 : 0) + (Input.GetKey(keyRight) ? 1 : 0);
         if (!inputEnabled)
@@ -57,6 +68,15 @@ public class PlayerInput : MonoBehaviour
         {
             jump = false;
         }
+        if (Input.GetKeyDown(keyC))
+        {
+            attack = true;
+        }
+        else
+        {
+            attack = false;
+        }
+        
     }
     //方形转化为圆坐标
     private Vector2 SquareToCircle(float Dright, float Dup)
