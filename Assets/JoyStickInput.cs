@@ -3,28 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class JoyStickInput :IUserInput
-{
-    [Header("=====KeySetting")]
-    public string keyUP = "w";
-    public string keyDown = "s";
-    public string keyLeft = "a";
-    public string keyRight = "d";
-
-    public string keyA="left shift";
-    public string keyB="space";
-    public string keyC="j";
-    public string keyD;
-
-    public string ArrowUp = "up";
-    public string ArrowDown = "down";
-    public string ArrowLeft = "left";
-    public string ArrowRight = "right";    
+{    
     private void Update()
     {
-        cUp = (Input.GetKey(ArrowUp) ? 1 : 0 + (Input.GetKey(ArrowDown) ? -1 : 0));
-        cRight = (Input.GetKey(ArrowRight) ? 1:0 + (Input.GetKey(ArrowLeft) ? -1 : 0));
-        targetUp = (Input.GetKey(keyUP) ? 1 : 0) + (Input.GetKey(keyDown) ? -1 : 0);
-        targetRight = (Input.GetKey(keyLeft) ? -1 : 0) + (Input.GetKey(keyRight) ? 1 : 0);
+        cUp = -1*Input.GetAxis("Axis5");
+        cRight = Input.GetAxis("Axis4");
+        targetUp = Input.GetAxis("YAxis");
+        targetRight = Input.GetAxis("XAxis");
         if (!inputEnabled)
         {
             targetUp = 0;
@@ -38,8 +23,8 @@ public class JoyStickInput :IUserInput
         dRight = temp.x;
         dMag = Mathf.Sqrt(dUp * dUp + dRight * dRight);       
         dVec = dRight * transform.right + dUp * transform.forward;
-        run = Input.GetKey(keyA);
-        if (Input.GetKeyDown(keyB))
+        run = Input.GetButton("BtnA");
+        if (Input.GetButtonDown("BtnX"))
         {
             jump = true;
         }
@@ -47,7 +32,7 @@ public class JoyStickInput :IUserInput
         {
             jump = false;
         }
-        if (Input.GetKeyDown(keyC))
+        if (Input.GetButtonDown("RB"))
         {
             attack = true;
         }
@@ -57,13 +42,6 @@ public class JoyStickInput :IUserInput
         }
         
     }
-    //方形转化为圆坐标
-    private Vector2 SquareToCircle(float Dright, float Dup)
-    {
-        Vector2 output = Vector2.zero;
-        output.x = Dright * Mathf.Sqrt(1 - (Dup * Dup) / 2.0f);
-        output.y = Dup * Mathf.Sqrt(1 - (Dright * Dright) / 2.0f);
-        return output;
-    }
+  
 
 }

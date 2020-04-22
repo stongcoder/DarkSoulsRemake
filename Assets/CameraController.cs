@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public PlayerInput playerInput;
+    public IUserInput pi;
     public Transform playerHandle;
     public Transform model;
     public float hMult = 1;
@@ -18,8 +18,16 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        playerInput = transform.GetComponentInParent<PlayerInput>();
-        playerHandle = playerInput.transform;
+        IUserInput[] inputs = transform.GetComponentsInParent<IUserInput>();        
+        foreach (var i in inputs)
+        {
+            if (i.enabled)
+            {
+                pi = i;
+                break;
+            }
+        }
+        playerHandle = pi.transform;
         model = playerHandle.GetComponent<ActorController>().model.transform;
         tempEuler = transform.localEulerAngles;
     }
@@ -32,10 +40,10 @@ public class CameraController : MonoBehaviour
     {
 
         tempVec = model.eulerAngles;
-        playerHandle.localEulerAngles += new Vector3(0, playerInput.cRight * Time.fixedDeltaTime * hMult, 0);
+        playerHandle.localEulerAngles += new Vector3(0, pi.cRight * Time.fixedDeltaTime * hMult, 0);
         model.eulerAngles = tempVec;
 
-        tempEuler -= new Vector3(playerInput.cUp * Time.fixedDeltaTime * vMult, 0, 0);
+        tempEuler -= new Vector3(pi.cUp * Time.fixedDeltaTime * vMult, 0, 0);
         tempEuler.x = Mathf.Clamp(tempEuler.x, -40, 30);
         transform.localEulerAngles = tempEuler;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInput : MonoBehaviour
+public class PlayerInput : IUserInput
 {
     [Header("=====KeySetting")]
     public string keyUP = "w";
@@ -20,26 +20,6 @@ public class PlayerInput : MonoBehaviour
     public string ArrowLeft = "left";
     public string ArrowRight = "right";
 
-
-    [Header("=====Output Signals")]
-    public float dUp;
-    public float dRight;
-    public float cRight;
-    public float cUp;
-    public float dMag;
-    public Vector3 dVec;
-    //1.pressing signal
-    public bool run;
-    //2.trigger once signal
-    public bool attack;
-    public bool jump;
-    //3.double trigger
-
-    private float targetUp;
-    private float targetRight;
-    private float velocityUp;
-    private float velocityRight;
-    public bool inputEnabled = true;
     private void Update()
     {
         cUp = (Input.GetKey(ArrowUp) ? 1 : 0 + (Input.GetKey(ArrowDown) ? -1 : 0));
@@ -78,13 +58,5 @@ public class PlayerInput : MonoBehaviour
         }
         
     }
-    //方形转化为圆坐标
-    private Vector2 SquareToCircle(float Dright, float Dup)
-    {
-        Vector2 output = Vector2.zero;
-        output.x = Dright * Mathf.Sqrt(1 - (Dup * Dup) / 2.0f);
-        output.y = Dup * Mathf.Sqrt(1 - (Dright * Dright) / 2.0f);
-        return output;
-    }
-
+   
 }

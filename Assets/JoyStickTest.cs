@@ -8,7 +8,7 @@ public class JoyStickTest : MonoBehaviour
     {
         //print(Input.GetAxis("XAxis"));
         //print(Input.GetAxis("YAxis"));
-        //print(Input.GetAxis("Axis4"));
+        print(Input.GetAxis("Axis4"));
         //print(Input.GetButtonDown("LB"));
         //print(Input.GetButtonDown("RB"));
         //print(Input.GetButtonDown("BtnX"));
@@ -17,6 +17,6 @@ public class JoyStickTest : MonoBehaviour
         //print(Input.GetButtonDown("BtnB"));
 
         //print(Input.GetAxis("LT"));
-        print(Input.GetAxis("RT"));
+        //print(Input.GetAxis("RT"));
     }
 }

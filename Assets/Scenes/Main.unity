@@ -830,6 +830,7 @@ GameObject:
   - component: {fileID: 1301023491}
   - component: {fileID: 1301023488}
   - component: {fileID: 1301023492}
+  - component: {fileID: 1301023493}
   - component: {fileID: 1301023489}
   - component: {fileID: 1301023490}
   m_Layer: 0
@@ -866,7 +867,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 1941595250}
-  playerInput: {fileID: 0}
+  pi: {fileID: 0}
   walkSpeed: 2.5
   runMultiPlayer: 2
   isLockPlanar: 0
@@ -920,11 +921,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1301023487}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71cdb1dc307e9854ca18b5517ac2b321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dUp: 0
+  dRight: 0
+  cRight: 0
+  cUp: 0
+  dMag: 0
+  dVec: {x: 0, y: 0, z: 0}
+  run: 0
+  attack: 0
+  jump: 0
+  inputEnabled: 1
   keyUP: w
   keyDown: s
   keyLeft: a
@@ -937,6 +948,18 @@ MonoBehaviour:
   ArrowDown: down
   ArrowLeft: left
   ArrowRight: right
+--- !u!114 &1301023493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301023487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4b2a49bc50ea1647968afd6e01bfad1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   dUp: 0
   dRight: 0
   cRight: 0
@@ -1084,7 +1107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60c04c23d165837408b75a5749d1edbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInput: {fileID: 0}
+  pi: {fileID: 0}
   playerHandle: {fileID: 0}
   model: {fileID: 0}
   hMult: 90

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ActorController : MonoBehaviour
 {
     public GameObject model;
-    public PlayerInput playerInput;
+    public IUserInput pi;
     public float walkSpeed = 1;
     public float runMultiPlayer=2;
     public bool isLockPlanar;
@@ -30,21 +30,29 @@ public class ActorController : MonoBehaviour
     private void Awake()
     {
         anim = model.GetComponent<Animator>();
-        playerInput = GetComponent<PlayerInput>();
         rigid = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
+        IUserInput[] inputs = GetComponents<IUserInput>();
+        foreach(var i in inputs)
+        {
+            if (i.enabled)
+            {
+                pi = i;
+                break;
+            }
+        }
     }
 
     private void Update()
     {
         //位移添加线性缓动
-        float velocity = playerInput.dMag * (playerInput.run ? 2 : 1);
+        float velocity = pi.dMag * (pi.run ? 2 : 1);
         anim.SetFloat("forward", Mathf.Lerp(anim.GetFloat("forward"), velocity, 0.2f));
         //anim.SetFloat("forward", velocity);
-        if (playerInput.dMag > 0.1f)
+        if (pi.dMag > 0.1f)
         {
             //为旋转添加球形缓动效果
-            Vector3 temp = Vector3.Slerp(model.transform.forward, playerInput.dVec, 0.2f);
+            Vector3 temp = Vector3.Slerp(model.transform.forward, pi.dVec, 0.2f);
             model.transform.forward = temp;
             
 
@@ -55,15 +63,15 @@ public class ActorController : MonoBehaviour
         }
         if (!isLockPlanar)
         {
-            planarVec = model.transform.forward * playerInput.dMag * walkSpeed * (playerInput.run ? runMultiPlayer : 1);
+            planarVec = model.transform.forward * pi.dMag * walkSpeed * (pi.run ? runMultiPlayer : 1);
         }
         
-        if (playerInput.jump)
+        if (pi.jump)
         {
             anim.SetTrigger("jump");
    
         }
-        if (playerInput.attack)
+        if (pi.attack)
         {
 
             if (CheckState("walkBlend") && !CheckNextState("jump"))
@@ -104,7 +112,7 @@ public class ActorController : MonoBehaviour
     ///处理消息
     private void OnJumpEnter()
     {
-        playerInput.inputEnabled = false;
+        pi.inputEnabled = false;
 
         jumpVelocity = new Vector3(0, jumpSpeed, 0);
         isLockPlanar = true;
@@ -125,7 +133,7 @@ public class ActorController : MonoBehaviour
     }
     private void OnGroundEnter()
     {
-        playerInput.inputEnabled = true;
+        pi.inputEnabled = true;
         isLockPlanar = false;
         col.material = frictionOne;
     }
@@ -135,13 +143,13 @@ public class ActorController : MonoBehaviour
     }
     private void OnFallEnter()
     {
-        playerInput.inputEnabled = false;
+        pi.inputEnabled = false;
         isLockPlanar = true;
 
     }
     private void OnJabEnter()
     {
-        playerInput.inputEnabled = false;
+        pi.inputEnabled = false;
         isLockPlanar = true;
 
     }
@@ -153,7 +161,7 @@ public class ActorController : MonoBehaviour
     }
     private void OnAttackEnter()
     {
-        playerInput.inputEnabled = false;
+        pi.inputEnabled = false;
         //isLockPlanar = true;
  
         lerpTarget = 1.0f;
@@ -172,7 +180,7 @@ public class ActorController : MonoBehaviour
     }
     private void OnAttackIdleEnter()
     {
-        playerInput.inputEnabled = true;
+        pi.inputEnabled = true;
         lerpTarget = 0;
     }
     private void OnAttackIdleUpdate()

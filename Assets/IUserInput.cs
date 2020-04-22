@@ -18,9 +18,18 @@ public abstract class IUserInput : MonoBehaviour
     public bool jump;
     //3.double trigger
 
-    private float targetUp;
-    private float targetRight;
-    private float velocityUp;
-    private float velocityRight;
+    protected float targetUp;
+    protected float targetRight;
+    protected float velocityUp;
+    protected float velocityRight;
     public bool inputEnabled = true;
+
+    //方形转化为圆坐标
+    protected Vector2 SquareToCircle(float Dright, float Dup)
+    {
+        Vector2 output = Vector2.zero;
+        output.x = Dright * Mathf.Sqrt(1 - (Dup * Dup) / 2.0f);
+        output.y = Dup * Mathf.Sqrt(1 - (Dright * Dright) / 2.0f);
+        return output;
+    }
 }
