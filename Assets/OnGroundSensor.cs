@@ -15,8 +15,8 @@ public class OnGroundSensor : MonoBehaviour
     private void FixedUpdate()
     {
         Collider[] overlapObjs;
-        point1 = transform.position + Vector3.up * (radius-0.3f);
-        point2 = transform.position + Vector3.up * (capCol.height - radius-0.3f);
+        point1 = transform.position + Vector3.up * (radius-0.5f);
+        point2 = transform.position + Vector3.up * (capCol.height - radius-0.5f);
         overlapObjs = Physics.OverlapCapsule(point1, point2, radius, LayerMask.GetMask("Ground"));
         if (overlapObjs.Length > 0)
         {
